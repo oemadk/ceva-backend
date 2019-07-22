@@ -51,7 +51,11 @@ class MaatwebsiteDemoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function openingBalanceUpload(Request $request)
-    {
+    {    
+
+
+        // $file = $request->file('import_file');0
+
         $request->validate([
             'import_file' => 'required'
         ]);
@@ -73,8 +77,20 @@ class MaatwebsiteDemoController extends Controller
                 Opening_balance::insert($arr);
             }
         }
+
+                return [
+                $request,
+                $arr,
+                    'uploaded successfully'
+        ];
+
+        // return [
+        //                 'hello world',
+
+
+        // ];
  
-        return back()->with('success', 'Opening Balance Records added successfuly.');
+
     }
 
 
@@ -103,7 +119,11 @@ class MaatwebsiteDemoController extends Controller
             }
         }
  
-        return back()->with('success', ' Collection Records added successfuly.');
+        return [
+
+            'success', ' Collection Records added successfuly.'
+
+        ];
     }
 
 
@@ -130,7 +150,11 @@ class MaatwebsiteDemoController extends Controller
             }
         }
  
-        return back()->with('success', 'Discount Records added successfuly.');
+                return [
+
+            'success', ' Discount Records added successfuly.'
+
+        ];
     }
 
 
@@ -163,7 +187,12 @@ class MaatwebsiteDemoController extends Controller
             }
         }
  
-        return back()->with('success', 'Insert Record successfully.');
+
+                 return [
+
+            'success', ' Invoices Records added successfuly.'
+
+        ];
     }
 
 
@@ -194,7 +223,13 @@ class MaatwebsiteDemoController extends Controller
             }
         }
  
-        return back()->with('success', 'Insert Record successfully.');
+
+                  return [
+
+            'success', ' Ending Balance Records added successfuly.'
+
+        ];
+
     }
 
 
@@ -212,7 +247,6 @@ public function GenerateUsers(){
 foreach($customerIDsFromOpeningbalance as $v)
 {                
 
-
      if($v>0){
         $obj = new Customer(); // this is to have new instance of own
         $obj->cutomer_id = $v;
@@ -222,19 +256,19 @@ foreach($customerIDsFromOpeningbalance as $v)
 
 }
 
-
+ self::makeStatements();
 
 }
-    public function makeStatements(){
+    
+
+public function makeStatements(){
 
 
-
-
- $Customerids = Customer::pluck('cutomer_id');
-
+$Customerids = Customer::pluck('cutomer_id');
 
 foreach($Customerids as $v)
 {                
+
 
 
 
@@ -275,11 +309,9 @@ $date = '2019'.'-0'.$i.'-';
             };
 
 
-
     }
 
 return [
-
 'STATEMENTS GENERATED SUCCESSFULLY'
 ];
 
