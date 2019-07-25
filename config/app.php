@@ -163,6 +163,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         InsertOnDuplicateKey\InsertOnDuplicateKeyServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
+
 
 
 

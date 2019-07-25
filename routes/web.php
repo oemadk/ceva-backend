@@ -23,4 +23,5 @@ Route::post('importExcel3', 'MaatwebsiteDemoController@discountUpload');
 Route::post('importExcel4', 'MaatwebsiteDemoController@invoicesBalance');
 Route::post('importExcel5', 'MaatwebsiteDemoController@endingBalance');
 Route::get('makestatement', 'MaatwebsiteDemoController@makeStatements');
+Route::get('show/statement', 'MaatwebsiteDemoController@showstatement');
 Route::get('send/sms', 'MaatwebsiteDemoController@sendSMS');

@@ -45,7 +45,7 @@ class MaatwebsiteDemoController extends Controller
         })->download($type);
     }
 
-    /**
+    /**showstatement
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -383,6 +383,12 @@ public function sendSMS(){
 
               ]);
 
+
+    }
+
+
+    public function showstatement(){
+        return view('userStatements');
 
     }
  }
