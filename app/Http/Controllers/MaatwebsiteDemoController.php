@@ -9,6 +9,7 @@ use App\Discount;
 use App\Invoice;
 use App\Endingbalance;
 use App\Customer;
+use App\Duebalance;
 use App\Customerstatement;
 use DB;
 use Excel;
@@ -234,6 +235,45 @@ class MaatwebsiteDemoController extends Controller
 
 
 
+
+                public function dueBalance(Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required'
+        ]);
+        // set_time_limit(0);
+
+ 
+        $path = $request->file('import_file')->getRealPath();
+
+        $data = Excel::load($path)->get();
+
+        if($data->count()){
+            foreach ($data as $key => $value) {
+                $arr[] = ['cutomer_id' => $value->client_id, 
+                          'customer_name' => $value->client_name,
+                          'overdue_balance' => $value->overdue_balance,
+                          'due_balance' => $value->due_balance,
+                          'due_date' => $value->due_date
+            ];
+            }
+ 
+            if(!empty($arr)){
+                Duebalance::insert($arr);
+            }
+        }
+ 
+
+                  return [
+
+            'success', ' Due Balance Records added successfuly.'
+
+        ];
+
+    }
+
+
+
 public function GenerateUsers(){
 
 
@@ -296,10 +336,14 @@ $date = '2019'.'-0'.$i.'-';
          }else{
             $obj->opening_balance = 0;
          }
+         if( $EndingBalanceForSpecificUser['ending_balance'] != null){
 
+        $obj->ending_balance = $EndingBalanceForSpecificUser->ending_balance;           
+         }else{
+            $obj->ending_balance = 0;
+         }
 
         $obj->customer_name = $nameitself->customer_name;
-        $obj->ending_balance = $EndingBalanceForSpecificUser['ending_balance'];
 
         $obj->save();
         };
@@ -341,6 +385,7 @@ return [
        $collection = collection::whereMonth('collection_date', $month)->where('cutomer_id', $id)->get();
        $discount = Discount::whereMonth('discount_date', $month)->where('cutomer_id', $id)->get();
        $invoice = Invoice::whereMonth('invoice_date', $month)->where('cutomer_id', $id)->get();
+       $duebalance = Duebalance::whereMonth('due_date', $month)->where('cutomer_id', $id)->get();
        // $collection = Customer::find($id)->collection;
 
             return response()->json([
@@ -351,6 +396,7 @@ return [
                 'discount' => $discount,
                 'invoice' => $invoice,
                 'collection' => $collection,
+                'duebalance' => $duebalance
 
 
                 
@@ -366,13 +412,17 @@ return [
 
  
 
-public function sendSMS(){
+public function sendSMS($number,$id,$month){
+
+
+
         $sms = AWS::createClient('sns');
     
 
         $sms->publish([
-                'Message' => 'Hello, This is just a test Message for CEVA from the backend',
-                'PhoneNumber' => '+0201222686756',    
+                'Message' => 'Hello, Check your balance here http://localhost:4200/authentication/user/'.$id.
+                '/month/'.$month,
+                'PhoneNumber' => '+02'.$number,    
                 'MessageAttributes' => [
                     'AWS.SNS.SMS.SMSType'  => [
                         'DataType'    => 'String',

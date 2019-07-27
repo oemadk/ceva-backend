@@ -16,7 +16,7 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('cutomer_id');
-            $table->date('monthly_statement_date');
+            $table->date('monthly_statement_date')->nullabe();
             $table->timestamps();
         });
     }

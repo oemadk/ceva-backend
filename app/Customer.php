@@ -6,6 +6,7 @@ use App\Endingbalance;
 use App\Invoice;
 use App\Opening_balance;
 use App\collection;
+use App\Duebalance;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -40,5 +41,10 @@ class Customer extends Model
                         public function collection()
     {
         return $this->hasMany(collection::class, 'cutomer_id', 'cutomer_id');
+    }
+
+                            public function duebalance()
+    {
+        return $this->hasMany(Duebalance::class, 'cutomer_id', 'cutomer_id');
     }
 }

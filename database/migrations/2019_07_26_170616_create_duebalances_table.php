@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDiscountsTable extends Migration
+class CreateDuebalancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateDiscountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('discounts', function (Blueprint $table) {
+        Schema::create('duebalances', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('cutomer_id');
             $table->string('customer_name');
-            $table->string('discount_comment')->nullable();
-            $table->date('discount_date');
-            $table->double('discount_amount');
+            $table->double('due_balance');
+            $table->double('overdue_balance');
+            $table->date('due_date');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateDiscountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('discounts');
+        Schema::dropIfExists('duebalances');
     }
 }
