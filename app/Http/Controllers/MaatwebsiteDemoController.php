@@ -420,7 +420,7 @@ public function sendSMS($number,$id,$month){
     
 
         $sms->publish([
-                'Message' => 'Hello, Check your balance here http://localhost:4200/authentication/user/'.$id.
+                'Message' => 'Hello, Check your balance here http://13.53.177.139:4202/authentication/user/'.$id.
                 '/month/'.$month,
                 'PhoneNumber' => '+02'.$number,    
                 'MessageAttributes' => [
