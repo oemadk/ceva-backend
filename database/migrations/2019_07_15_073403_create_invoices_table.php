@@ -21,6 +21,7 @@ class CreateInvoicesTable extends Migration
             $table->double('invoice_amount');
             $table->bigInteger('invoice_id');
             $table->longText('product')->nullable();
+            $table->longText('invoice_comment')->nullable();
             $table->double('amount');
             $table->double('unit_price');
             $table->timestamps();

@@ -10,6 +10,7 @@ use App\Invoice;
 use App\Endingbalance;
 use App\Customer;
 use App\Duebalance;
+use App\Customercomments;
 use App\Customerstatement;
 use DB;
 use Excel;
@@ -375,6 +376,18 @@ return [
     }
 
 
+    public function UserStatementsList2($id){
+       $month = $id;
+
+       $data = Customerstatement::whereMonth('monthly_statement_date', $month)->where('statement_status', 1)->get();
+
+            return response()->json([
+                'status' => 'Retrieved all Statements Correctly from' . $month,
+                'data' => $data
+            ]);
+
+    }
+
         public function getUserThings($id, $month){
 
 
@@ -386,6 +399,9 @@ return [
        $discount = Discount::whereMonth('discount_date', $month)->where('cutomer_id', $id)->get();
        $invoice = Invoice::whereMonth('invoice_date', $month)->where('cutomer_id', $id)->get();
        $duebalance = Duebalance::whereMonth('due_date', $month)->where('cutomer_id', $id)->get();
+       $customerstatement = Customerstatement::whereMonth('monthly_statement_date', $month)->where('cutomer_id', $id)->get();
+ 
+       $customerstatementcomments = Customercomments::where('customer_statement_id', $customerstatement->pluck('id'))->get();
        // $collection = Customer::find($id)->collection;
 
             return response()->json([
@@ -396,7 +412,9 @@ return [
                 'discount' => $discount,
                 'invoice' => $invoice,
                 'collection' => $collection,
-                'duebalance' => $duebalance
+                'duebalance' => $duebalance,
+                'customerstatement' => $customerstatement,
+                'customerstatementcomments' => $customerstatementcomments
 
 
                 
@@ -412,7 +430,7 @@ return [
 
  
 
-public function sendSMS($number,$id,$month){
+public function sendSMS($number,$id,$month,$iditself){
 
 
 
@@ -432,6 +450,11 @@ public function sendSMS($number,$id,$month){
      
 
               ]);
+        $Q1 = Customerstatement::find($iditself);
+
+        $Q1->statement_status = 1;
+        $Q1->save();
+
 
 
     }
@@ -439,6 +462,105 @@ public function sendSMS($number,$id,$month){
 
     public function showstatement(){
         return view('userStatements');
+
+    }
+
+    public function addComments(Request $request){
+        $discount_id = $request->discount_id;
+        $discount_comment = $request->discount_comment;
+
+
+$Q1 = Discount::find($discount_id);
+$Q1->discount_comment = $discount_comment;
+$Q1->save();
+
+
+
+        $endingbalance_id = $request->endingbalance_id;
+        $endingbalance_comment = $request->endingbalance_comment;
+
+
+$Q1 = Endingbalance::find($endingbalance_id);
+$Q1->ending_balance_comment = $endingbalance_comment;
+$Q1->save();
+
+
+
+        $invoice_id = $request->invoice_id;
+        $invoice_comment = $request->invoice_comment;
+
+
+$Q1 = Invoice::find($invoice_id);
+$Q1->invoice_comment = $invoice_comment;
+$Q1->save();
+
+
+
+        $opening_id = $request->opening_id;
+        $opening_comment = $request->opening_comment;
+
+
+$Q1 = Opening_balance::find($opening_id);
+$Q1->comment = $opening_comment;
+$Q1->save();
+
+
+
+
+        $collection_id = $request->collection_id;
+        $collection_comment = $request->collection_comment;
+
+
+$Q1 = Collection::find($collection_id);
+$Q1->collection_comment = $collection_comment;
+$Q1->save();
+
+
+
+                    return response()->json([
+            
+             
+                'discount record' => $Q1
+
+
+                
+
+            ]);
+
+
+    }
+
+
+     public function addComments2(Request $request){
+        $customer_statement_id = $request->customer_statement_id;
+        $difference_in_payment_comment = $request->difference_in_payment_comment;
+        $difference_in_amount_comment = $request->difference_in_amount_comment;
+        $payment_not_documented_comment = $request->payment_not_documented_comment;
+        $invoice_not_documented_comment = $request->invoice_not_documented_comment;
+        $other_comment = $request->other_comment;
+
+
+
+
+$Q1 = new Customercomments;
+$Q1->customer_statement_id = $customer_statement_id;
+$Q1->difference_in_payment_comment = $difference_in_payment_comment;
+$Q1->difference_in_amount_comment = $difference_in_amount_comment;
+$Q1->payment_not_documented_comment = $payment_not_documented_comment;
+$Q1->invoice_not_documented_comment = $invoice_not_documented_comment;
+$Q1->other_comment = $other_comment;
+$Q1->save();
+
+                    return response()->json([
+            
+             
+                'discount record' => $Q1
+
+
+                
+
+            ]);
+
 
     }
  }
