@@ -430,7 +430,7 @@ return [
 
  
 
-public function sendSMS($number,$id,$month,$iditself){
+public function sendSMS($number,$id,$month){
 
 
 
@@ -450,10 +450,10 @@ public function sendSMS($number,$id,$month,$iditself){
      
 
               ]);
-        $Q1 = Customerstatement::find($iditself);
+        // $Q1 = Customerstatement::find($iditself);
 
-        $Q1->statement_status = 1;
-        $Q1->save();
+        // $Q1->statement_status = 1;
+        // $Q1->save();
 
 
 
