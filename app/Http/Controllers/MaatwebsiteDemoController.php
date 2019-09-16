@@ -400,7 +400,6 @@ return [
        $invoice = Invoice::whereMonth('invoice_date', $month)->where('cutomer_id', $id)->get();
        $duebalance = Duebalance::whereMonth('due_date', $month)->where('cutomer_id', $id)->get();
        $customerstatement = Customerstatement::whereMonth('monthly_statement_date', $month)->where('cutomer_id', $id)->get();
- 
        $customerstatementcomments = Customercomments::where('customer_statement_id', $customerstatement->pluck('id'))->get();
        // $collection = Customer::find($id)->collection;
 
@@ -438,9 +437,9 @@ public function sendSMS($number,$id,$month){
     
 
         $sms->publish([
-                'Message' => 'Hello, Check your balance here http://3.83.153.110:4200/authentication/user/'.$id.
+                'Message' => 'Hello, Check your balance here http://18.207.186.164:4200/authentication/user/'.$id.
                 '/month/'.$month,
-                'PhoneNumber' => '+02'.$number,    
+                'PhoneNumber' => '+0201222686756',    
                 'MessageAttributes' => [
                     'AWS.SNS.SMS.SMSType'  => [
                         'DataType'    => 'String',
