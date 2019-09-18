@@ -399,7 +399,14 @@ return [
        $discount = Discount::whereMonth('discount_date', $month)->where('cutomer_id', $id)->get();
        $invoice = Invoice::whereMonth('invoice_date', $month)->where('cutomer_id', $id)->get();
        $duebalance = Duebalance::whereMonth('due_date', $month)->where('cutomer_id', $id)->get();
-       $customerstatement = Customerstatement::whereMonth('monthly_statement_date', $month)->where('cutomer_id', $id)->get();
+       $customerstatement = Customerstatement::whereMonth('monthly_statement_date', $month)->where('cutomer_id', $id)->FirstorFail();
+  
+       $csid = Customerstatement::find($customerstatement->id);
+       if($csid){
+             $csid->statement_status = 1;
+       $csid->save();
+       }
+  
        $customerstatementcomments = Customercomments::where('customer_statement_id', $customerstatement->pluck('id'))->get();
        // $collection = Customer::find($id)->collection;
 
@@ -413,7 +420,8 @@ return [
                 'collection' => $collection,
                 'duebalance' => $duebalance,
                 'customerstatement' => $customerstatement,
-                'customerstatementcomments' => $customerstatementcomments
+                'customerstatementcomments' => $customerstatementcomments,
+                'csid'=> $csid
 
 
                 
@@ -449,6 +457,7 @@ public function sendSMS($number,$id,$month){
      
 
               ]);
+
         // $Q1 = Customerstatement::find($iditself);
 
         // $Q1->statement_status = 1;
@@ -467,54 +476,69 @@ public function sendSMS($number,$id,$month){
     public function addComments(Request $request){
         $discount_id = $request->discount_id;
         $discount_comment = $request->discount_comment;
-
-
-$Q1 = Discount::find($discount_id);
+$amount_user_wantsTo_pay_discounts=$request->amount_user_wantsTo_pay_discounts;
+if(!empty($discount_id)){
+    $Q1 = Discount::find($discount_id);
 $Q1->discount_comment = $discount_comment;
+$Q1->amount_user_wantsTo_pay_discounts = $amount_user_wantsTo_pay_discounts;
 $Q1->save();
+
+}
 
 
 
         $endingbalance_id = $request->endingbalance_id;
         $endingbalance_comment = $request->endingbalance_comment;
+        $amount_user_wantsTo_pay = $request->amount_user_wantsTo_pay;
 
+if(!empty($endingbalance_id)){
 
 $Q1 = Endingbalance::find($endingbalance_id);
 $Q1->ending_balance_comment = $endingbalance_comment;
+$Q1->amount_user_wantsTo_pay = $amount_user_wantsTo_pay;
 $Q1->save();
 
-
+}
 
         $invoice_id = $request->invoice_id;
         $invoice_comment = $request->invoice_comment;
+        $user_pays_invoices = $request->user_pays_invoices;
 
+if(!empty($invoice_id)){
 
 $Q1 = Invoice::find($invoice_id);
 $Q1->invoice_comment = $invoice_comment;
+$Q1->user_pays_invoices = $user_pays_invoices;
 $Q1->save();
 
-
+}
 
         $opening_id = $request->opening_id;
         $opening_comment = $request->opening_comment;
+        $amount_user_wantsTo_pay_opening = $request->amount_user_wantsTo_pay_opening;
 
+if(!empty($opening_id)){
 
 $Q1 = Opening_balance::find($opening_id);
 $Q1->comment = $opening_comment;
+$Q1->amount_user_wantsTo_pay_opening = $amount_user_wantsTo_pay_opening;
 $Q1->save();
 
-
+}
 
 
         $collection_id = $request->collection_id;
         $collection_comment = $request->collection_comment;
+        $amount_user_wantsTo_pay_collections = $request->amount_user_wantsTo_pay_collections;
 
+if(!empty($collection_id)){
 
 $Q1 = Collection::find($collection_id);
 $Q1->collection_comment = $collection_comment;
+$Q1->amount_user_wantsTo_pay_collections = $amount_user_wantsTo_pay_collections;
 $Q1->save();
 
-
+}
 
                     return response()->json([
             
