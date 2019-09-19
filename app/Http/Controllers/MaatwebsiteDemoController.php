@@ -407,7 +407,7 @@ return [
        $csid->save();
        }
   
-       $customerstatementcomments = Customercomments::where('customer_statement_id', $customerstatement->pluck('id'))->get();
+       $customerstatementcomments = Customercomments::where('customer_statement_id', $customerstatement->id)->get();
        // $collection = Customer::find($id)->collection;
 
             return response()->json([
