@@ -9,6 +9,7 @@ use App\Discount;
 use App\Invoice;
 use App\Endingbalance;
 use App\Customer;
+use App\User;
 use App\Duebalance;
 use App\Customercomments;
 use App\Customerstatement;
@@ -16,6 +17,7 @@ use DB;
 use Excel;
 use Illuminate\Http\Request;
 use AWS;
+use Illuminate\Support\Facades\Hash;
  
 class MaatwebsiteDemoController extends Controller
 {
@@ -91,6 +93,69 @@ class MaatwebsiteDemoController extends Controller
 
 
         // ];
+ 
+
+    }
+
+
+
+    public function salesUsers(Request $request)
+    {    
+
+
+        // $file = $request->file('import_file');0
+
+        $request->validate([
+            'import_file' => 'required'
+        ]);
+ 
+        $path = $request->file('import_file')->getRealPath();
+
+        $data = Excel::load($path)->get();
+
+        if($data->count()){
+            foreach ($data as $key => $value) {
+                $arr[] = ['name' => $value->sales_name, 'email' => $value->sales_email
+
+                        , 'password' => Hash::make($value->sales_password), 'role' => 2,
+                        'phone' => $value->sales_phone
+            ];
+            }
+        }
+
+  
+ 
+            if(!empty($arr)){
+
+                User::insert($arr);
+              
+        }
+return response()->json([
+"status" => "success",
+"message" => 'Uploaded Successfully!'
+        ]);
+
+        // return [
+        //                 'hello world',
+
+
+        // ];
+ 
+
+    }
+
+
+//this function's purpose is to reitrive all sales Users
+
+        public function getAllSalesUsers()
+    {    
+
+
+           $data = User::where('role', 2)->get();
+              return response()->json([
+                'status' => 'Retrieved all sales users successfully',
+                'data' => $data
+            ]);
  
 
     }

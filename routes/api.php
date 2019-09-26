@@ -18,11 +18,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+Route::post('import/sales', 'MaatwebsiteDemoController@salesUsers');
 
     Route::get('statements2/{id}', 'MaatwebsiteDemoController@UserStatementsList2');
     Route::get('statements/{id}', 'MaatwebsiteDemoController@UserStatementsList');
     Route::get('user/statement/{id}/{month}', 'MaatwebsiteDemoController@getUserThings');
     Route::get('send/sms/{number}/{id}/{month}', 'MaatwebsiteDemoController@sendSMS');
+
+Route::get('sales/users/all', 'MaatwebsiteDemoController@getAllSalesUsers');
+
 
 
 Route::post('importExcel', 'MaatwebsiteDemoController@openingBalanceUpload');
@@ -34,3 +38,8 @@ Route::post('importExcel6', 'MaatwebsiteDemoController@dueBalance');
 Route::get('makestatements', 'MaatwebsiteDemoController@GenerateUsers');
 Route::post('add/comments', 'MaatwebsiteDemoController@addComments');
 Route::post('add/comments2', 'MaatwebsiteDemoController@addComments2');
+
+Route::post('/register', 'AuthController@register');
+
+Route::post('/login', 'AuthController@login');
+Route::post('/logout', 'AuthController@logout');
